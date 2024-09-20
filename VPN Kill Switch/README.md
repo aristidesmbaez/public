@@ -1,0 +1,2 @@
+## Macos VPN Kill Switch
+This script was created to manually configure firewall rules on MAC OS to implemnt a VPN kill switch. The need for this arouse when exploring VPN solutions and finding an option that we liked that did not have a built in VPN killswitch. So a manual solution was created. Scripts designed to run mac os and windows.

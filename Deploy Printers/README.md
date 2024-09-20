@@ -1,0 +1,2 @@
+# Deploy printers with Intune
+This script was created to deploy local printers using powershell and Intune. It was designed to load a zip file containg printer drivers, install those drivers, configure the printer and also load addtional registry keys to configure some default printer options.
