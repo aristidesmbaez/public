@@ -1,4 +1,8 @@
-﻿function Get-AppVersion {
+﻿$TempDir = [System.IO.Path]::GetTempPath()
+$LogPathName = Join-Path -Path $TempDir -ChildPath "S1-Install-Script-$(Get-Date -Format 'MM-dd-yyyy').log"
+$isInstalled = Get-AppVersion "Sentinel Agent"
+
+function Get-AppVersion {
 
     param (
         [Parameter(Position = 0)]
@@ -25,11 +29,22 @@
     Invoke-Command -ScriptBlock $sb -ArgumentList $regpath, $filter, $properties @splat
 
 }
+Start-Transcript $LogPathName -Append
 
-$isInstalled = Get-AppVersion "Sentinel Agent"
+Write-Host "Checking for App"
+
 if(!$isInstalled) {
-Copy-Item "\\10.251.0.107\Software\Installers\SentinelOneInstaller_windows_64bit_v24_1_4_257.exe" -Destination "$env:TEMP/SentinelOneInstaller_windows_64bit_v24_1_4_257.exe"
-$TempDir = [System.IO.Path]::GetTempPath()
-cd $TempDir
-.\SentinelOneInstaller_windows_64bit_v24_1_4_257.exe -q -"token"
+    Write-Host "App not installed"
+    Write-Host "Copy installer to temp dir"
+    Copy-Item "\\10.251.0.107\Software\Installers\SentinelOneInstaller_windows_64bit_v24_1_4_257.exe" -Destination "$TempDir/SentinelOneInstaller_windows_64bit_v24_1_4_257.exe"
+    cd $TempDir
+    Write-Host "Installing App"
+    .\SentinelOneInstaller_windows_64bit_v24_1_4_257.exe -q -"token"
+    Write-Host "Deleting Installer"
+    cd c:\
+    Remove-Item "$TempDir/SentinelOneInstaller_windows_64bit_v24_1_4_257.exe" -Force
+}else{
+    Write-Host "App is installed already, ending"
 }
+
+Stop-Transcript
