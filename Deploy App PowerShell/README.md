@@ -1,0 +1,2 @@
+# Deploy printers with Intune
+This script was created to deploy exe applications using PowerShell and Group Policy. It was designed to check if the app is installed, if not installed the script will copy the installer from file server and execute the installer. This example is checking for and installing the Sentinel One agent.
