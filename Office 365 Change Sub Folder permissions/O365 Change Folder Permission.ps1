@@ -8,7 +8,7 @@ Get-PSSession | Remove-PSSession
 $Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://outlook.office365.com/powershell-liveid/ -Credential $UserCredential -Authentication Basic -AllowRedirection
 #Import Session
 Import-PSSession $Session
-# Gather's List of Office 365 mailboxes displays them, and allows you to select One 
+# Gather List of Office 365 mailboxes, and display with dropdown
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
 $objForm = New-Object System.Windows.Forms.Form 
@@ -60,7 +60,7 @@ $objForm.Add_Shown({$objForm.Activate()})
 
 $script:mailbox=$objListBox.SelectedItem
 
-# Gather's list of user's folders displays them and allows the user to select one
+#Gather list of user folders, and display with dropdown
  
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
@@ -112,7 +112,7 @@ $objForm.Add_Shown({$objForm.Activate()})
 
 $script:folder=$objListBox.SelectedItem
 
-# Gather's List of mailboxes to give permissions to display's and allows the user to select one
+#Gather list of mailboxes to give permissions and display dropdown
  
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
@@ -164,7 +164,7 @@ $objForm.Add_Shown({$objForm.Activate()})
 $script:user=$objListBox.SelectedItem
 
 
-# Displays Permissions for user to select
+# Display permissions to apply
  
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") 
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
@@ -227,7 +227,7 @@ $script:permission=$objListBox.SelectedItem
 $OUTPUT=[System.Windows.Forms.MessageBox]::Show(" Please confirm You want to give $user $permission permissions to $mailbox 's $folder folder", "Confirm", 4)
 if ($OUTPUT -eq "YES" ) 
 { 
-#Goes through the list of every folder and sub folder and firstly removes any preexisting permissions and then apply's the new permission select by user
+#Goes through the list of every folder and sub folder and firstly removes any preexisting permissions and then apply's the new permission selected by user
 ForEach($f in (Get-MailboxFolderStatistics $mailbox | Where {( $_.FolderPath.Contains("$folder") -eq $True) -and ($_.FolderPath.Contains("/Calendar/Birthdays") -eq $False) -and ($_.FolderPath.Contains("/Calendar/United States holidays") -eq $False) -and ($_.FolderPath.Contains("/Calendar Logging") -eq $False)} ) ){
  $fname = "$mailbox" + ":" + $f.FolderPath.Replace("/","\");
  Remove-MailboxFolderPermission $fname -User $user -confirm: $false -EA SilentlyContinue
